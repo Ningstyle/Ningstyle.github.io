@@ -18,7 +18,7 @@ h1{
   transform:translateY(-50%);
   font-family: '微软雅黑';
   font-size: 40px;
-  color: #c70012;
+  color: #c703ea;
   padding: 0 20px;
 }
 h1 span{
@@ -95,7 +95,7 @@ Heart.prototype.draw = function(){
   }
   ctx.globalAlpha = this.size;
   ctx.shadowBlur = Math.round((3 - this.size) * 10);
-  ctx.shadowColor = "hsla(0, 100%, 60%,0.5)";
+  ctx.shadowColor = "hsla(1, 100%, 60%,0.8)";
   ctx.shadowOffsetX = this.x + 1000;
   ctx.globalCompositeOperation = "screen"
   ctx.closePath();
@@ -126,7 +126,7 @@ window.addEventListener("resize", onResize);
 requestAnimationFrame(render);
 
 window.onload=function starttime(){
-		time(h1,'1994/7/7');	 // 开始时间
+		time(h1,'1993/09/14');	 // 开始时间
 		ptimer = setTimeout(starttime,1000); // 添加计时器
 }
 
@@ -141,7 +141,7 @@ window.onload=function starttime(){
 		var second = parseInt(time%60);  // 以60秒为一整份 取余 剩下秒数
 //				console.log(hour+":"+minute+":"+second)
 //				alert(hour)
-		obj.innerHTML="哎<br>我从出生到现在已经有：<br>"+idDou(day)+"天"+idDou(hour)+"小时"+idDou(minute)+"分"+idDou(second)+"秒"+"了<br><span>不知道剩下的日子我在哪里你在哪里？<br>不管面临多大的压力,不管前面的路如何崎岖.<br>不管经历过什么,我仍坚信世界那么大终会有属于我的一片天.<br>相信中间的计时器,将永远继续下去,直至数据溢出.</span><h3>人生在世两三万天，弹指一挥间！</h3><h2>李宁</h2>"
+		obj.innerHTML="咦<br>我从出生到现在已经有：<br>"+idDou(day)+"天"+idDou(hour)+"小时"+idDou(minute)+"分"+idDou(second)+"秒"+"了<br><span>人生最可怕的事，是一边后悔一边生活<br>出去走走，看看不同的风景，接触不同的人和事<br>你会发现，你的烦恼原来是那么微不足道<br>相信中间的计时器,将永远继续下去,直至数据溢出.</span><h3>人生在世两三万天，弹指一挥间！</h3><h2>张晓红</h2>"
 		
 		return true;
 	}
