@@ -42,8 +42,8 @@ function onResize(){
   wh = canvas.height = window.innerHeight;
 }
 
-ctx.strokeStyle = "red";
-ctx.shadowBlur = 25;
+ctx.strokeStyle = "green";
+ctx.shadowBlur = 15;
 ctx.shadowColor = "hsla(0, 100%, 60%,0.5)";
 
 var precision = 100;
@@ -95,7 +95,7 @@ Heart.prototype.draw = function(){
   }
   ctx.globalAlpha = this.size;
   ctx.shadowBlur = Math.round((3 - this.size) * 10);
-  ctx.shadowColor = "hsla(1, 100%, 60%,0.8)";
+  ctx.shadowColor = "hsla(1, 100%, 50%,0.8)";
   ctx.shadowOffsetX = this.x + 1000;
   ctx.globalCompositeOperation = "screen"
   ctx.closePath();
@@ -126,7 +126,7 @@ window.addEventListener("resize", onResize);
 requestAnimationFrame(render);
 
 window.onload=function starttime(){
-		time(h1,'1993/09/14');	 // 开始时间
+		time(h1,'1993/10/10');	 // 开始时间
 		ptimer = setTimeout(starttime,1000); // 添加计时器
 }
 
@@ -141,7 +141,7 @@ window.onload=function starttime(){
 		var second = parseInt(time%60);  // 以60秒为一整份 取余 剩下秒数
 //				console.log(hour+":"+minute+":"+second)
 //				alert(hour)
-		obj.innerHTML="咦<br>我从出生到现在已经有：<br>"+idDou(day)+"天"+idDou(hour)+"小时"+idDou(minute)+"分"+idDou(second)+"秒"+"了<br><span>人生最可怕的事，是一边后悔一边生活<br>出去走走，看看不同的风景，接触不同的人和事<br>你会发现，你的烦恼原来是那么微不足道<br>相信中间的计时器,将永远继续下去,直至数据溢出.</span><h3>人生在世两三万天，弹指一挥间！</h3><h2>张晓红</h2>"
+		obj.innerHTML="咦<br>我从出生到现在已经有：<br>"+idDou(day)+"天"+idDou(hour)+"小时"+idDou(minute)+"分"+idDou(second)+"秒"+"了<br><span>人生最可怕的事，是一边后悔一边生活<br>出去走走，看看不同的风景，接触不同的人和事<br>你会发现，你的烦恼原来是那么微不足道<br>相信中间的计时器,将永远继续下去,直至数据溢出.</span><h3>人生在世两三万天，弹指一挥间！</h3><h2>崔洪影</h2>"
 		
 		return true;
 	}
