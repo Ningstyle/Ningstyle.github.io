@@ -1,159 +1,87 @@
 <!doctype html>
 <html>
-<head>
-<meta charset="utf-8">
-<title>love</title>
-<link href="favicon.ico" rel="shortcut icon" />
-<style>
-body{
-  overflow: hidden;
-  margin: 0;
-}
-h1{
-  position: fixed;
-  top: 50%;
-  left: 0;
-  width: 100%;
-  text-align: center;
-  transform:translateY(-50%);
-  font-family: '微软雅黑';
-  font-size: 40px;
-  color: #c703ea;
-  padding: 0 20px;
-}
-h1 span{
-	font-size:20px;
-}
-</style>
-
-</head>
-<body>
-<h1 id="h1"></h1>
-<canvas></canvas> <!--canvas 画布-->
-
-<script>
-var canvas = document.querySelector("canvas"),
-  ctx = canvas.getContext("2d");
-
-var ww,wh;
-
-function onResize(){
-  ww = canvas.width = window.innerWidth;
-  wh = canvas.height = window.innerHeight;
-}
-
-ctx.strokeStyle = "green";
-ctx.shadowBlur = 15;
-ctx.shadowColor = "hsla(0, 100%, 60%,0.5)";
-
-var precision = 100;
-var hearts = [];
-var mouseMoved = false;
-function onMove(e){
-  mouseMoved = true;
-  if(e.type === "touchmove"){
-    hearts.push(new Heart(e.touches[0].clientX, e.touches[0].clientY));
-    hearts.push(new Heart(e.touches[0].clientX, e.touches[0].clientY));
-  }
-  else{
-    hearts.push(new Heart(e.clientX, e.clientY));
-    hearts.push(new Heart(e.clientX, e.clientY));
-  }
-}
-
-var Heart = function(x,y){
-  this.x = x || Math.random()*ww;
-  this.y = y || Math.random()*wh;
-  this.size = Math.random()*2 + 1;
-  this.shadowBlur = Math.random() * 10;
-  this.speedX = (Math.random()+0.2-0.6) * 8;
-  this.speedY = (Math.random()+0.2-0.6) * 8;
-  this.speedSize = Math.random()*0.05 + 0.01;
-  this.opacity = 1;
-  this.vertices = [];
-  for (var i = 0; i < precision; i++) {
-    var step = (i / precision - 0.5) * (Math.PI * 2);
-    var vector = {
-      x : (15 * Math.pow(Math.sin(step), 3)),
-      y : -(13 * Math.cos(step) - 5 * Math.cos(2 * step) - 2 * Math.cos(3 * step) - Math.cos(4 * step)) 
-    }
-    this.vertices.push(vector);
-  }
-}
-
-Heart.prototype.draw = function(){
-  this.size -= this.speedSize;
-  this.x += this.speedX;
-  this.y += this.speedY;
-  ctx.save();
-  ctx.translate(-1000,this.y);
-  ctx.scale(this.size, this.size);
-  ctx.beginPath();
-  for (var i = 0; i < precision; i++) {
-    var vector = this.vertices[i];
-    ctx.lineTo(vector.x, vector.y);
-  }
-  ctx.globalAlpha = this.size;
-  ctx.shadowBlur = Math.round((3 - this.size) * 10);
-  ctx.shadowColor = "hsla(1, 100%, 50%,0.8)";
-  ctx.shadowOffsetX = this.x + 1000;
-  ctx.globalCompositeOperation = "screen"
-  ctx.closePath();
-  ctx.fill()
-  ctx.restore();
-};
-
-
-function render(a){
-  requestAnimationFrame(render);
-  
-  hearts.push(new Heart())
-  ctx.clearRect(0,0,ww,wh);
-  for (var i = 0; i < hearts.length; i++) {
-    hearts[i].draw();
-    if(hearts[i].size <= 0){
-      hearts.splice(i,1);
-      i--;
-    }
-  }
-}
-
-
-onResize();
-window.addEventListener("mousemove", onMove);
-window.addEventListener("touchmove", onMove);
-window.addEventListener("resize", onResize);
-requestAnimationFrame(render);
-
-window.onload=function starttime(){
-		time(h1,'1993/10/10');	 // 开始时间
-		ptimer = setTimeout(starttime,1000); // 添加计时器
-}
-
-	function time(obj,futimg){
-		var nowtime = new Date().getTime(); // 现在时间转换为时间戳
-		var futruetime =  new Date(futimg).getTime(); // 未来时间转换为时间戳
-		var msec = nowtime-futruetime; // 毫秒 未来时间-现在时间
-		var time = (msec/1000);  // 毫秒/1000
-		var day = parseInt(time/86400); // 天  24*60*60*1000 
-		var hour = parseInt(time/3600)-24*day;    // 小时 60*60 总小时数-过去的小时数=现在的小时数 
-		var minute = parseInt(time%3600/60); // 分 -(day*24) 以60秒为一整份 取余 剩下秒数 秒数/60 就是分钟数
-		var second = parseInt(time%60);  // 以60秒为一整份 取余 剩下秒数
-//				console.log(hour+":"+minute+":"+second)
-//				alert(hour)
-		obj.innerHTML="咦<br>我从出生到现在已经有：<br>"+idDou(day)+"天"+idDou(hour)+"小时"+idDou(minute)+"分"+idDou(second)+"秒"+"了<br><span>人生最可怕的事，是一边后悔一边生活<br>出去走走，看看不同的风景，接触不同的人和事<br>你会发现，你的烦恼原来是那么微不足道<br>相信中间的计时器,将永远继续下去,直至数据溢出.</span><h3>人生在世两三万天，弹指一挥间！</h3><h2>崔洪影</h2>"
-		
-		return true;
-	}
-	function idDou(str){
-		if(str>=10){
-			return str
-		}else{
-			return '0'+str
-		}
-	}
-</script>
-
-</body>
+	<head>
+		<meta charset="utf-8"/>
+		<meta name="keywords" content=""/>
+		<meta name="description" content=""/>
+		<title>chy</title>
+		<style style="text/css">
+			*{margin:0;padding:0;}
+			body{background:url("images/1.jpg");background-size:100% 100%;}
+			/*start top*/
+			.top{width:400px;height:100px;margin:0 auto;margin-top:160px;font-size:40px;font-family:"华文行楷";color:#fff;
+			<!--background:-webkit-linear-gradient(45deg,#ff0000,#ffcc00,#ffff99,#33ccff,#00ff33,#6600ff,#333399);
+			-webkit-background-clip:text;-->}
+			/*end top*/
+			/*start box*/
+			.box{width:320px;height:320px;margin:auto;margin-top:5%;perspective:800px;/*景深*/}
+			.box .pic{position:relative;transform-style:preserve-3d;/*3d环境*/ animation:play 10s linear infinite;/*动画名称 执行时间 匀速 无限执行*/}
+			.box ul li{list-style:none;position:absolute;top:0;left:0;}
+			/*start box*/
+			/*定义一个关键帧*/
+			@keyframes play{
+				from{transform:rotateY(0deg);}
+				to{transform:rotateY(360deg);}
+			}
+			/*start text*/
+			#text{width:600px;height:200px;color:#6fade1;margin:auto;font-size:32px;font-family:"楷体";margin-top:300px;}
+			/*end text*/
+		</style>
+	</head>
+	<body>
+		<!--start top-->
+		<div class="top">
+			<marquee behavior="alternate">时光不老，我们不散</marquee>
+		</div>
+		<!--end top-->
+		<!--start box-->
+		<div class="box">
+			<div class="pic">
+				<ul>
+					<li><img src="images/731341925942516368.jpg" width="" height="" alt=""/></li>
+					<li><img src="images/313275536290456322.jpg" width="" height="" alt=""/></li>
+					<li><img src="images/480084307788855463.jpg" width="" height="" alt=""/></li>
+					<li><img src="images/493197781115617168.jpg" width="" height="" alt=""/></li>
+					<li><img src="images/670557091379688112.jpg" width="" height="" alt=""/></li>
+					<li><img src="images/565229636302692527.jpg" width="" height="" alt=""/></li>
+				</ul>
+			</div>
+		</div>
+		<!--end box-->
+		<!--start text-->
+		<div id="text"></div>
+		<!--end text-->
+		<embed src="music.mp3" hidden="true"/>
+		<script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+		<!--雪花-->
+		<script src="js/snow.js"></script>
+		<script>
+			$(".pic ul li").each(function(i){//遍历
+				var deg=360/$(".pic ul li").size();//size个数
+				//当前的li对象 添加css样式
+				$(this).css({"transform":"rotateY("+deg*i+"deg) translateZ(216px)"});
+				
+				$.fn.snow({
+					minSize:10,
+					maxSize:15,
+					newOn:500,
+					flakeColor:"#ffffff"
+				});
+			});
+			
+			var i=0;
+			var str="能够遇见你是我最大的幸运，有了你生活变得丰富多彩，有了你，世界变得如此迷人；你是我的世界，我的世界是你，对我来说，不是在最美好的时光遇见了你，而是遇见你后都是最美好的时光！";
+			
+			window.onload=function typing(){
+				//获取div
+				var mydiv=document.getElementById("text");
+				mydiv.innerHTML+=str.charAt(i);
+				i++;
+				var id=setTimeout(typing,100);
+				if(i==str.length){
+					clearTimeout(id);
+				}
+			}
+		</script>
+	</body>
 </html>
-
