@@ -57,11 +57,16 @@
 		<script src="js/snow.js"></script>
 		<script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 		<script>
-			document.getElementById('car_audio').play(); 
-		    //必须在微信Weixin JSAPI的WeixinJSBridgeReady才能生效 
-		    document.addEventListener("WeixinJSBridgeReady", function () { 
-		        document.getElementById('car_audio').play(); 
-		    }, false); 
+			document.addEventListener('DOMContentLoaded', function () {
+	        	function audioAutoPlay() {
+	        		var audio = document.getElementById('car_audio');
+	        		audio.play();
+	        		document.addEventListener("WeixinJSBridgeReady", function () {
+	    				audio.play();
+	        		}, false);
+	        	}
+	    		audioAutoPlay();
+	    	}); 
 			$(".pic ul li").each(function(i){//遍历
 				var deg=360/$(".pic ul li").size();//size个数
 				//当前的li对象 添加css样式
