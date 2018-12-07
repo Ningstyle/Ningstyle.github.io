@@ -1,98 +1,121 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8"/>
-		<meta name="keywords" content=""/>
-		<meta name="description" content=""/>
-		<title>chy</title>
-		<style style="text/css">
-			*{margin:0;padding:0;}
-			body{background:url("images/1.jpg");background-size:100% 100%;}
-			/*start top*/
-			.top{width:400px;height:100px;margin:0 auto;margin-top:80px;font-size:40px;font-family:"华文行楷";color:#fff;
-			<!--background:-webkit-linear-gradient(45deg,#ff0000,#ffcc00,#ffff99,#33ccff,#00ff33,#6600ff,#333399);
-			-webkit-background-clip:text;-->}
-			/*end top*/
-			/*start box*/
-			.box{width:120px;height:120px;margin:auto;margin-top:35%;perspective:800px;/*景深*/}
-			.box .pic{position:relative;transform-style:preserve-3d;/*3d环境*/ animation:play 10s linear infinite;/*动画名称 执行时间 匀速 无限执行*/}
-			.box ul li{list-style:none;position:absolute;top:0;left:0;}
-			/*start box*/
-			/*定义一个关键帧*/
-			@keyframes play{
-				from{transform:rotateY(0deg);}
-				to{transform:rotateY(360deg);}
-			}
-			/*start text*/
-			#text{width:600px;height:200px;color:#6fade1;margin:auto;font-size:32px;font-family:"楷体";margin-top:300px;}
-			/*end text*/
-		</style>
-	</head>
-	<body>
-		<!--start top-->
-		<div class="top">
-			<marquee behavior="alternate">时光不老，我们不散</marquee>
-		</div>
-		<!--end top-->
-		<!--start box-->
-		<div class="box">
-			<div class="pic">
-				<ul>
-					<li><img src="images/565229636302692527.jpg" width="" height="" alt=""/></li>
-					<li><img src="images/313275536290456322.jpg" width="" height="" alt=""/></li>
-					<li><img src="images/480084307788855463.jpg" width="" height="" alt=""/></li>
-					<li><img src="images/565229636302692527.jpg" width="" height="" alt=""/></li>
-					<li><img src="images/313275536290456322.jpg" width="" height="" alt=""/></li>
-					<li><img src="images/565229636302692527.jpg" width="" height="" alt=""/></li>
-				</ul>
-			</div>
-		</div>
-		<!--end box-->
-		<!--start text-->
-		<div id="text"></div>
-		<!--end text-->
-		<audio preload="preload" controls id="car_audio" src="music.mp3" loop></audio> 
-		<script src="https://www.jq22.com/jquery/jquery-1.10.2.js"></script>
-		<!--雪花-->
-		<script src="js/snow.js"></script>
-		<script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-		<script>
-			document.addEventListener('DOMContentLoaded', function () {
-	        	function audioAutoPlay() {
-	        		var audio = document.getElementById('car_audio');
-	        		audio.play();
-	        		document.addEventListener("WeixinJSBridgeReady", function () {
-	    				audio.play();
-	        		}, false);
-	        	}
-	    		audioAutoPlay();
-	    	}); 
-			$(".pic ul li").each(function(i){//遍历
-				var deg=360/$(".pic ul li").size();//size个数
-				//当前的li对象 添加css样式
-				$(this).css({"transform":"rotateY("+deg*i+"deg) translateZ(216px)"});
-				
-				$.fn.snow({
-					minSize:10,
-					maxSize:15,
-					newOn:500,
-					flakeColor:"#ffffff"
-				});
-			});
-			
-			var i=0;
-			var str="能够遇见你是我最大的幸运，有了你生活变得丰富多彩，有了你，世界变得如此迷人；你是我的世界，我的世界是你，对我来说，不是在最美好的时光遇见了你，而是遇见你后都是最美好的时光！";
-			
-			window.onload=function typing(){
-				//获取div
-				var mydiv=document.getElementById("text");
-				mydiv.innerHTML+=str.charAt(i);
-				i++;
-				var id=setTimeout(typing,100);
-				if(i==str.length){
-					clearTimeout(id);
-				}
-			}
-		</script>
-	</body>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+<title>Lite Map</title>
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&akIrFOnSSWV0UQF5Q71V3sos7gb0qNZv5z&callback=init"></script>
+<style type="text/css">
+html {height: 100%;}
+body{height: 100%; margin: 0px; padding: 0px;}
+#container{height: 100%}
+</style>
+</head>
+<body>
+<div id="container"></div>
+</body>
 </html>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+<script type="text/javascript">
+var CoodrsArr=[]
+var nvaga = navigator.geolocation;
+nvaga.getCurrentPosition(updatPos,errorLoca);
+var map = new BMap.Map("container");
+var point = new BMap.Point(116.331398,39.897445);
+map.centerAndZoom(point,13);
+map.addEventListener("click",function(e){
+    // alert(e.point.lng + "," + e.point.lat);
+    var new_point1 = new BMap.Point(e.point.lng,e.point.lat);
+    var marker1 = new BMap.Marker(new_point1);  
+    map.addOverlay(marker1);             
+    map.panTo(new_point1);
+    CoodrsArr.push(e.point.lng + "," + e.point.lat)
+    for(let i=0;i<CoodrsArr.length;i++){
+        console.log(CoodrsArr[i])
+    }
+});
+function updatPos(position){
+    var latitude = position.coords.latitude;
+    var longitude = position.coords.longitude;
+    var accuracy = position.coords.accuracy;
+    var timestamp = position.timestamp;
+    // alert('经度坐标' + longitude);
+    // alert('纬度坐标' + latitude);
+    // alert('准确度' + accuracy);
+    // alert('获取位置数据的时间' + timestamp);
+    if(latitude!=''&&longitude!=''){
+        // map.clearOverlays();
+        // 坐标转换
+        $.ajax({
+            url:"https://api.map.baidu.com/geoconv/v1/",
+            type:'get',
+            dataType:'jsonp',
+            data:{
+                coords:''+longitude+','+latitude+'',
+                ak:'IrFOnSSWV0UQF5Q71V3sos7gb0qNZv5z',
+                from:'1',
+                to:'5',
+                output:'json'
+            },
+            success:function(e){
+                let data = e.result
+                // alert('转换后经度为'+data[0].x+'----纬度为'+data[0].y)
+                // map.setZoom(18)
+                GetCityNameAddr(data[0].x,data[0].y)
+                var new_point = new BMap.Point(data[0].x,data[0].y);
+                var marker = new BMap.Marker(new_point);  
+                map.addOverlay(marker);             
+                map.panTo(new_point);
+
+
+            }
+
+        })
+         
+        function translateCallback(point1){
+            var marker1 = new BMap.Marker(point1);
+            map.addOverlay(marker1);
+            // var label = new BMap.Label("转换后的百度坐标",{offset:new BMap.Size(20,-10)});
+            marker1.setLabel(label); //添加百度label
+            map.setCenter(point1);
+        }
+    }  
+}
+
+function errorLoca(error){
+    switch(error.code){
+        case 0:
+            alert('位置信息获取失败，失败原因'+error.message);
+        break;
+        case 1://错误编码 PERMISSION_DENIED
+            alert('用户拒绝共享其位置信息');
+        break;
+        case 2://错误编码 POSITION_UNAVAILABLE
+            alert('尝试获取用户位置数据，但失败了');
+        break;
+        case 3://错误编码 TIMEOUT
+            alert('尝试获取用户的位置数据超时');
+        break;
+    }
+}
+
+function GetCityNameAddr(x,y){
+    $.ajax({
+        url:"https://api.map.baidu.com/geocoder/v2/",
+        type:"get",
+        dataType:'jsonp',
+        data:{
+            location:''+y+','+x+'',
+            radius:'1000',
+            ak:'IrFOnSSWV0UQF5Q71V3sos7gb0qNZv5z',
+            output:'json',
+            latest_admin:'1',
+            pois:1
+        },
+        success:function(e){
+            console.log(e)
+            alert('定位显示您在：'+e.result.sematic_description+'---'+e.result.formatted_address)
+        }
+    })
+}
+</script>
