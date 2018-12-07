@@ -59,7 +59,7 @@ function updatPos(position){
             },
             success:function(e){
                 let data = e.result
-                // alert('转换后经度为'+data[0].x+'----纬度为'+data[0].y)
+                alert('转换后经度为'+data[0].x+'----纬度为'+data[0].y)
                 // map.setZoom(18)
                 GetCityNameAddr(data[0].x,data[0].y)
                 var new_point = new BMap.Point(data[0].x,data[0].y);
