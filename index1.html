@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+<title>Lite Map</title>
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&akIrFOnSSWV0UQF5Q71V3sos7gb0qNZv5z&callback=init"></script>
+<style type="text/css">
+html {height: 100%;}
+body{height: 100%; margin: 0px; padding: 0px;}
+#container{height: 100%}
+</style>
+</head>
+<body>
+<div id="container"></div>
+</body>
+</html>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+<script type="text/javascript">
+var CoodrsArr=[]
+var nvaga = navigator.geolocation;
+nvaga.getCurrentPosition(updatPos,errorLoca);
+var map = new BMap.Map("container");
+var point = new BMap.Point(116.331398,39.897445);
+map.centerAndZoom(point,13);
+map.addEventListener("click",function(e){
+    // alert(e.point.lng + "," + e.point.lat);
+    var new_point1 = new BMap.Point(e.point.lng,e.point.lat);
+    var marker1 = new BMap.Marker(new_point1);  
+    map.addOverlay(marker1);             
+    map.panTo(new_point1);
+    CoodrsArr.push(e.point.lng + "," + e.point.lat)
+    for(let i=0;i<CoodrsArr.length;i++){
+        console.log(CoodrsArr[i])
+    }
+});
+function updatPos(position){
+    var latitude = position.coords.latitude;
+    var longitude = position.coords.longitude;
+    var accuracy = position.coords.accuracy;
+    var timestamp = position.timestamp;
+    // alert('经度坐标' + longitude);
+    // alert('纬度坐标' + latitude);
+    // alert('准确度' + accuracy);
+    // alert('获取位置数据的时间' + timestamp);
+    if(latitude!=''&&longitude!=''){
+        // map.clearOverlays();
+        // 坐标转换
+        $.ajax({
+            url:"https://api.map.baidu.com/geoconv/v1/",
+            type:'get',
+            dataType:'jsonp',
+            data:{
+                coords:''+longitude+','+latitude+'',
+                ak:'IrFOnSSWV0UQF5Q71V3sos7gb0qNZv5z',
+                from:'1',
+                to:'5',
+                output:'json'
+            },
+            success:function(e){
+                let data = e.result
+                alert('转换后经度为'+data[0].x+'----纬度为'+data[0].y)
+                // map.setZoom(18)
+                GetCityNameAddr(data[0].x,data[0].y)
+                var new_point = new BMap.Point(data[0].x,data[0].y);
+                var marker = new BMap.Marker(new_point);  
+                map.addOverlay(marker);             
+                map.panTo(new_point);
+
+
+            }
+
+        })
+         
+        function translateCallback(point1){
+            var marker1 = new BMap.Marker(point1);
+            map.addOverlay(marker1);
+            // var label = new BMap.Label("转换后的百度坐标",{offset:new BMap.Size(20,-10)});
+            marker1.setLabel(label); //添加百度label
+            map.setCenter(point1);
+        }
+    }  
+}
+
+function errorLoca(error){
+    switch(error.code){
+        case 0:
+            alert('位置信息获取失败，失败原因'+error.message);
+        break;
+        case 1://错误编码 PERMISSION_DENIED
+            alert('用户拒绝共享其位置信息');
+        break;
+        case 2://错误编码 POSITION_UNAVAILABLE
+            alert('尝试获取用户位置数据，但失败了');
+        break;
+        case 3://错误编码 TIMEOUT
+            alert('尝试获取用户的位置数据超时');
+        break;
+    }
+}
+
+function GetCityNameAddr(x,y){
+    $.ajax({
+        url:"https://api.map.baidu.com/geocoder/v2/",
+        type:"get",
+        dataType:'jsonp',
+        data:{
+            location:''+y+','+x+'',
+            radius:'1000',
+            ak:'IrFOnSSWV0UQF5Q71V3sos7gb0qNZv5z',
+            output:'json',
+            latest_admin:'1',
+            pois:1
+        },
+        success:function(e){
+            console.log(e)
+            alert(e.result.formatted_address+e.result.sematic_description)
+        }
+    })
+}
+</script>

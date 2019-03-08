@@ -1,121 +1,191 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
-<title>Lite Map</title>
-<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&akIrFOnSSWV0UQF5Q71V3sos7gb0qNZv5z&callback=init"></script>
-<style type="text/css">
-html {height: 100%;}
-body{height: 100%; margin: 0px; padding: 0px;}
-#container{height: 100%}
+<meta charset="utf-8">
+<title>love</title>
+<link href="favicon.ico" rel="shortcut icon" />
+<style>
+body{
+  /* overflow: hidden; */
+  margin: 0;
+  width: 100%;
+  height: 100%x;
+}
+canvas{
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1
+}
+div{
+  /* position: fixed; */
+  top: 0;
+  left: 0;
+  width: 100%;
+  /* text-align: center; */
+  /* transform:translateY(-50%); */
+  font-family: '微软雅黑';
+  font-size: 30px;
+  color: #c70012;
+  padding: 20px 30px 20px 30px;
+  box-sizing: border-box
+}
+.hhj{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: url(2.jpg) no-repeat -486px;
+  background-size: cover;
+  height: 2000px;
+  z-index: -1;
+  margin: 0;
+  padding: 0;
+}
+b{
+  width: 289px;
+  display: block;
+  margin: 0 auto;
+  font-size: 55px;
+}
+div span{
+	font-size:30px;
+}
+p{
+  line-height: 50px;
+  font-size: 27px;
+}
 </style>
+
 </head>
 <body>
-<div id="container"></div>
+<div id="h1"></div>
+<canvas></canvas> <!--canvas 画布-->
+<h2 class="hhj"></h2>
+<script>
+var canvas = document.querySelector("canvas"),
+  ctx = canvas.getContext("2d");
+
+var ww,wh;
+
+function onResize(){
+  ww = canvas.width = window.innerWidth;
+  wh = canvas.height = window.innerHeight;
+}
+
+ctx.strokeStyle = "red";
+ctx.shadowBlur = 25;
+ctx.shadowColor = "hsla(0, 100%, 60%,0.5)";
+
+var precision = 100;
+var hearts = [];
+var mouseMoved = false;
+function onMove(e){
+  mouseMoved = true;
+  if(e.type === "touchmove"){
+    hearts.push(new Heart(e.touches[0].clientX, e.touches[0].clientY));
+    hearts.push(new Heart(e.touches[0].clientX, e.touches[0].clientY));
+  }
+  else{
+    hearts.push(new Heart(e.clientX, e.clientY));
+    hearts.push(new Heart(e.clientX, e.clientY));
+  }
+}
+
+var Heart = function(x,y){
+  this.x = x || Math.random()*ww;
+  this.y = y || Math.random()*wh;
+  this.size = Math.random()*2 + 1;
+  this.shadowBlur = Math.random() * 10;
+  this.speedX = (Math.random()+0.2-0.6) * 8;
+  this.speedY = (Math.random()+0.2-0.6) * 8;
+  this.speedSize = Math.random()*0.05 + 0.01;
+  this.opacity = 1;
+  this.vertices = [];
+  for (var i = 0; i < precision; i++) {
+    var step = (i / precision - 0.5) * (Math.PI * 2);
+    var vector = {
+      x : (15 * Math.pow(Math.sin(step), 3)),
+      y : -(13 * Math.cos(step) - 5 * Math.cos(2 * step) - 2 * Math.cos(3 * step) - Math.cos(4 * step)) 
+    }
+    this.vertices.push(vector);
+  }
+}
+
+Heart.prototype.draw = function(){
+  this.size -= this.speedSize;
+  this.x += this.speedX;
+  this.y += this.speedY;
+  ctx.save();
+  ctx.translate(-1000,this.y);
+  ctx.scale(this.size, this.size);
+  ctx.beginPath();
+  for (var i = 0; i < precision; i++) {
+    var vector = this.vertices[i];
+    ctx.lineTo(vector.x, vector.y);
+  }
+  ctx.globalAlpha = this.size;
+  ctx.shadowBlur = Math.round((3 - this.size) * 10);
+  ctx.shadowColor = "hsla(0, 100%, 60%,0.5)";
+  ctx.shadowOffsetX = this.x + 1000;
+  ctx.globalCompositeOperation = "screen"
+  ctx.closePath();
+  ctx.fill()
+  ctx.restore();
+};
+
+
+function render(a){
+  requestAnimationFrame(render);
+  
+  hearts.push(new Heart())
+  ctx.clearRect(0,0,ww,wh);
+  for (var i = 0; i < hearts.length; i++) {
+    hearts[i].draw();
+    if(hearts[i].size <= 0){
+      hearts.splice(i,1);
+      i--;
+    }
+  }
+}
+
+
+onResize();
+window.addEventListener("mousemove", onMove);
+window.addEventListener("touchmove", onMove);
+window.addEventListener("resize", onResize);
+requestAnimationFrame(render);
+
+window.onload=function starttime(){
+		time(h1,'1994/7/7');	 // 开始时间
+		// ptimer = setTimeout(starttime,1000); // 添加计时器
+}
+
+	function time(obj,futimg){
+		var nowtime = new Date().getTime(); // 现在时间转换为时间戳
+		var futruetime =  new Date(futimg).getTime(); // 未来时间转换为时间戳
+		var msec = nowtime-futruetime; // 毫秒 未来时间-现在时间
+		var time = (msec/1000);  // 毫秒/1000
+		var day = parseInt(time/86400); // 天  24*60*60*1000 
+		var hour = parseInt(time/3600)-24*day;    // 小时 60*60 总小时数-过去的小时数=现在的小时数 
+		var minute = parseInt(time%3600/60); // 分 -(day*24) 以60秒为一整份 取余 剩下秒数 秒数/60 就是分钟数
+		var second = parseInt(time%60);  // 以60秒为一整份 取余 剩下秒数
+//				console.log(hour+":"+minute+":"+second)
+//				alert(hour)
+		obj.innerHTML="<b>100天致辞</b><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;爱到分才显珍贵，很多人都不懂珍惜拥有.只到失去才看到，其实那最熟悉的才是最珍贵的。</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;爱一个人，倘若没有求的勇气，就像没有翅膀不能飞越沧海。除非，甘心就此放你离开，否则，还是去君子好逑吧。</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;红尘万里，很多人遇到了，散失了，误解了，错过了，所以，到年老仍是赤心怀念的人，不是每个人都可以拥有的。</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;世界上最笨的人，就是爱一个人爱得都不知道如何是好，这个人就是我。我会时时想着你，为你做任何事情。你对今后有什么想法呢?</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可能我给不了你世界上最好的一切，可是我一定会把我最好的一切给你，愿因只有三个字：我爱你!永远永远!</p><p>不知道前面这几句有没有在你心里有没有一点点感触，100天，在我心里却很多，很多天，很多年都还没有过呢！</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;想了很多，组织了很多次语言，却一眼不能表达我的心情，你对我的包容、忍让远远大于我对你的，有时间自己会觉得心里会过意不去！</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我曾幻想过会对自己你的女朋友好，最起码做到不惹她生气、不惹她不开心，而现在看来，有时候只是幻想，却没有做到！</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我选择把所有的不开心都放在心里只不过不想因为自己的负面情绪影响到你，我也懂我们之间不应该有任何层面的隔阂！可是这是现实生活的无奈，我不便倾诉，也没有习惯倾诉。</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;人本来就很奇怪，有时候会觉得我们很腻，但你不在的时候却总感觉缺点什么，却又希望被腻。</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可能我不比别人优秀，也可能不比别人懂得如何去爱，但我懂得如何去珍惜感情，不管任何感情。</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;不觉间100天过去了，依稀记得跟你初次见面时的情景，这可能是我这辈子最大的幸运遇见你。这辈子最幸福的事，就是有一个那么深爱着你的我</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;没有太多的需求，而你也没有管我要什么，可能每个人心中都希望生活过的好一点，而你也不例外，在爱情上却没有要求，有时候想起来真的很感动，我喜欢看你睡着的样子，因为那时的你不会有烦恼。喜欢你对我笑的样子，因为那时你最开心。我只希望你开心</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;期待着我能在我满头白发，满脸皱纹，满口假牙的时候，还能和我爱的人相互扶持，相互依偎，蹒跚地一边走，一边欣赏公园花坛中盛开的红玫瑰</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;今天是农历二月二，公历3.8,我们相识的100天，所以祝福亲爱的节日快乐，永远开心，试试顺心！</p><p style='text-align:right'>永远爱你的那个人</p><p style='text-align:right'>2019.3.8</p>"
+		
+		return true;
+	}
+	function idDou(str){
+		if(str>=10){
+			return str
+		}else{
+			return '0'+str
+		}
+	}
+
+</script>
+
 </body>
 </html>
-<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
-<script type="text/javascript">
-var CoodrsArr=[]
-var nvaga = navigator.geolocation;
-nvaga.getCurrentPosition(updatPos,errorLoca);
-var map = new BMap.Map("container");
-var point = new BMap.Point(116.331398,39.897445);
-map.centerAndZoom(point,13);
-map.addEventListener("click",function(e){
-    // alert(e.point.lng + "," + e.point.lat);
-    var new_point1 = new BMap.Point(e.point.lng,e.point.lat);
-    var marker1 = new BMap.Marker(new_point1);  
-    map.addOverlay(marker1);             
-    map.panTo(new_point1);
-    CoodrsArr.push(e.point.lng + "," + e.point.lat)
-    for(let i=0;i<CoodrsArr.length;i++){
-        console.log(CoodrsArr[i])
-    }
-});
-function updatPos(position){
-    var latitude = position.coords.latitude;
-    var longitude = position.coords.longitude;
-    var accuracy = position.coords.accuracy;
-    var timestamp = position.timestamp;
-    // alert('经度坐标' + longitude);
-    // alert('纬度坐标' + latitude);
-    // alert('准确度' + accuracy);
-    // alert('获取位置数据的时间' + timestamp);
-    if(latitude!=''&&longitude!=''){
-        // map.clearOverlays();
-        // 坐标转换
-        $.ajax({
-            url:"https://api.map.baidu.com/geoconv/v1/",
-            type:'get',
-            dataType:'jsonp',
-            data:{
-                coords:''+longitude+','+latitude+'',
-                ak:'IrFOnSSWV0UQF5Q71V3sos7gb0qNZv5z',
-                from:'1',
-                to:'5',
-                output:'json'
-            },
-            success:function(e){
-                let data = e.result
-                alert('转换后经度为'+data[0].x+'----纬度为'+data[0].y)
-                // map.setZoom(18)
-                GetCityNameAddr(data[0].x,data[0].y)
-                var new_point = new BMap.Point(data[0].x,data[0].y);
-                var marker = new BMap.Marker(new_point);  
-                map.addOverlay(marker);             
-                map.panTo(new_point);
 
-
-            }
-
-        })
-         
-        function translateCallback(point1){
-            var marker1 = new BMap.Marker(point1);
-            map.addOverlay(marker1);
-            // var label = new BMap.Label("转换后的百度坐标",{offset:new BMap.Size(20,-10)});
-            marker1.setLabel(label); //添加百度label
-            map.setCenter(point1);
-        }
-    }  
-}
-
-function errorLoca(error){
-    switch(error.code){
-        case 0:
-            alert('位置信息获取失败，失败原因'+error.message);
-        break;
-        case 1://错误编码 PERMISSION_DENIED
-            alert('用户拒绝共享其位置信息');
-        break;
-        case 2://错误编码 POSITION_UNAVAILABLE
-            alert('尝试获取用户位置数据，但失败了');
-        break;
-        case 3://错误编码 TIMEOUT
-            alert('尝试获取用户的位置数据超时');
-        break;
-    }
-}
-
-function GetCityNameAddr(x,y){
-    $.ajax({
-        url:"https://api.map.baidu.com/geocoder/v2/",
-        type:"get",
-        dataType:'jsonp',
-        data:{
-            location:''+y+','+x+'',
-            radius:'1000',
-            ak:'IrFOnSSWV0UQF5Q71V3sos7gb0qNZv5z',
-            output:'json',
-            latest_admin:'1',
-            pois:1
-        },
-        success:function(e){
-            console.log(e)
-            alert(e.result.formatted_address+e.result.sematic_description)
-        }
-    })
-}
-</script>
